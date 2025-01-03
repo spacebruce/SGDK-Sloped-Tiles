@@ -88,7 +88,7 @@ local function exportFrame(frm, exportFile)
 	io.write("MapHeight = ")
 	io.write(sprite.height)
 	io.write(";\n")
-	io.write(";\n")
+	io.write("\n")
 end
 
 local dlg = Dialog()
@@ -124,5 +124,6 @@ if data.ok then
 
 	io.close(f)
 end
+
 
 
