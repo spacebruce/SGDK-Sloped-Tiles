@@ -22,4 +22,4 @@ static const uint16_t E1M1TileWidth = 320/16;
 static const uint16_t E1M1TileHeight = 224/16;
 static const uint16_t E1M1MapWidth = 320;
 static const uint16_t E1M1MapHeight = 224;
-;
+
