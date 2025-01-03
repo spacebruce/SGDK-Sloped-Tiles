@@ -58,6 +58,9 @@ int main(bool hardReset)
     int16_t playerXLast = 0;
     int16_t playerYLast = 0;
 
+    //
+    uint16_t clearMessageTimer = 0;
+
     // game loop de loop
     while(TRUE)
     {
@@ -84,7 +87,14 @@ int main(bool hardReset)
             else                //if player is moving DOWN, pretend it's a solid block
                 collider = TileSolid;
         }
-        
+
+        // Hurt block handling, just say "OUCH" for one second
+        if(collider == TileHurt)
+        {
+            VDP_drawText("ouch!", 0, 0);
+            clearMessageTimer = 60;
+        }
+
         //
         if(collider == TileBlank)
         {
@@ -103,6 +113,14 @@ int main(bool hardReset)
         // Remember last position
         playerXLast = playerX;
         playerYLast = playerY;
+
+        // 
+        if(clearMessageTimer > 0)
+            --clearMessageTimer;
+        if(clearMessageTimer == 0)
+        {
+            VDP_clearPlane(BG_A, true);
+        }
 
         // SGDK housekeeping
         SPR_update();

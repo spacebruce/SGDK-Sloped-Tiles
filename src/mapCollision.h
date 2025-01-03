@@ -18,6 +18,7 @@ enum CollisionType
     TileSolidLeftHalf = 16, TileSolidRightHalf = 17, 
     // Special blocks
     TileJumpthrough = 18,
+    TileHurt = 19,
 };
 
 //
@@ -27,7 +28,7 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y);
 static inline __attribute__((always_inline)) uint8_t CheckMapCollisionTileFast(const int16_t TX, const int16_t TY)
 {
     /*
-        // Sometimes returns mysterious compiler errors
+        // Sometimes returns mysterious compiler errors, looking into it...
         uint8_t result;
         asm volatile
         (

@@ -29,7 +29,6 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
     {
         case TileBlank:         // If it was ~nothing~, return TileBlank
         case TileSolid:         // If it was a solid square, return here with TileSolid.
-        case TileJumpthrough:   // Put any addition square-shaped blocks here 
             return tiletype;
         default:            // If it was something else, don't return here.
         break;
@@ -65,9 +64,9 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
         case TileSolidLeftHalf:     hit = ((px * 2) < LevelTileSize);     break;
         case TileSolidRightHalf:    hit = ((px * 2) > LevelTileSize);     break;
 
-        // Whatever it found, it wasn't in list, bail out here with nothing.
+        // Whatever it found, it wasn't in list, just return the value it found, treating it like a square block: 
         default:
-            return TileBlank;
+            return tiletype;
         break;
     }
 
