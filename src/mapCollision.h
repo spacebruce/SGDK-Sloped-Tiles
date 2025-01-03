@@ -22,13 +22,26 @@ enum CollisionType
 };
 
 //
+
+/// @brief Sets up collision data for current game map
+/// @param CollisionArray 
+/// @param Width 
+/// @param Height 
 void SetMapCollision(const uint8_t* CollisionArray, const uint16_t Width, const uint16_t Height);
+
+/// @brief Check against the collision array, returns a uint8_t / u8 byte containing a CollisionType value
+/// @param X 
+/// @param Y 
 uint8_t CheckMapCollision(const int16_t X, const int16_t Y);
 
+
+/// @brief Check against the collision array using a tile index as fast as possible.
+/// @param TX 
+/// @param TY 
 static inline __attribute__((always_inline)) uint8_t CheckMapCollisionTileFast(const int16_t TX, const int16_t TY)
 {
     /*
-        // Sometimes returns mysterious compiler errors, looking into it...
+        // Faster, but sometimes returns mysterious compiler errors, looking into it...
         uint8_t result;
         asm volatile
         (
