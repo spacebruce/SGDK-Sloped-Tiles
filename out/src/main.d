@@ -52,4 +52,4 @@ out/src/main.o: src/main.c \
  /home/user/Tools/marsdev/mars/m68k-elf/inc/string.h \
  /home/user/Tools/marsdev/mars/m68k-elf/inc/maths.h \
  /home/user/Tools/marsdev/mars/m68k-elf/inc/dma.h res/sprites_res.h \
- src/mapCollision.h
+ src/mapCollision.h src/E1M1.h

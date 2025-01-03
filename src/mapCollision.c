@@ -22,16 +22,15 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
     // What tile is it in? Calls the function found in the mapCollision.h file
     const uint16_t tx = X >> LevelCollisionShift;
     const uint16_t ty = Y >> LevelCollisionShift;
-    uint16_t tiletype = CheckMapCollisionTileFast(tx, ty);
-
+    register uint16_t tiletype = CheckMapCollisionTileFast(tx, ty);
 
     // Decide based on what the collision found
     switch(tiletype)
     {
-        case TileBlank:     // If it was ~nothing~, return TileBlank
-            return TileBlank;
-        case TileSolid:     // If it was a solid square, return here with TileSolid.
-            return TileSolid;
+        case TileBlank:         // If it was ~nothing~, return TileBlank
+        case TileSolid:         // If it was a solid square, return here with TileSolid.
+        case TileJumpthrough:   // Put any addition square-shaped blocks here 
+            return tiletype;
         default:            // If it was something else, don't return here.
         break;
     }
@@ -39,7 +38,6 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
     // What pixel in the tile is it in? 
     uint16_t px = X % LevelTileSize;
     uint16_t py = Y % LevelTileSize;
-
     uint8_t hit;    // Contains the result of the collision check, 0 for nothing, 1 for something
 
     switch(tiletype)
