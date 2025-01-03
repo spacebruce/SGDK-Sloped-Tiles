@@ -24,21 +24,21 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
     const uint16_t ty = Y >> LevelCollisionShift;
     uint16_t tiletype = CheckMapCollisionTileFast(tx, ty);
 
-    // What pixel in the tile is it in?  Don't calculate yet.
-    uint16_t px, py;
 
     // Decide based on what the collision found
     switch(tiletype)
     {
         case TileBlank:     // If it was ~nothing~, return TileBlank
             return TileBlank;
-        case TileSolid:     // If it was a solid square, return here with TileSolid, etc.
+        case TileSolid:     // If it was a solid square, return here with TileSolid.
             return TileSolid;
-        default:            // If it was something else, calculate the pixel within the tile now.
-            px = X % LevelTileSize;
-            py = Y % LevelTileSize;
+        default:            // If it was something else, don't return here.
         break;
     }
+
+    // What pixel in the tile is it in? 
+    uint16_t px = X % LevelTileSize;
+    uint16_t py = Y % LevelTileSize;
 
     uint8_t hit;    // Contains the result of the collision check, 0 for nothing, 1 for something
 
