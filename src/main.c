@@ -62,8 +62,7 @@ int main(bool hardReset)
     int16_t playerYLast = 0;
     while(TRUE)
     {
-        SPR_setPosition(player, playerX - 16, playerY - 32);
-
+        SPR_setPosition(player, playerX - 15, playerY - 31);
 
         // Move player
         if(playerX < 0) playerX = 0;

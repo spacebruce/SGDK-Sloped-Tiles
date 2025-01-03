@@ -21,6 +21,7 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y);
 
 static inline __attribute__((always_inline)) uint8_t CheckMapCollisionTileFast(const int16_t TX, const int16_t TY)
 {
+    // Switch to assembly version if running on a Megadrive
 #if defined(__GNUC__) && defined(__m68k__)
     uint8_t result;
     asm volatile
