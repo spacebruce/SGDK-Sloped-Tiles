@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "mapcollision.h": "c",
+        "genesis.h": "c"
+    }
+}
