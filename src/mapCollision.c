@@ -19,50 +19,65 @@ void SetMapCollision(const uint8_t* CollisionArray, const uint16_t Width, const 
 
 uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
 {
-    uint16_t tileType = CheckMapCollisionTileFast(X >> LevelCollisionShift, Y >> LevelCollisionShift);
-    uint16_t tx, ty;
+    // What tile is it in? Calls the function found in the mapCollision.h file
+    const uint16_t tx = X >> LevelCollisionShift;
+    const uint16_t ty = Y >> LevelCollisionShift;
+    uint16_t tiletype = CheckMapCollisionTileFast(tx, ty);
 
-    // quick return
-    switch(tileType)
+    // What pixel in the tile is it in?  Don't calculate yet.
+    uint16_t px, py;
+
+    // Decide based on what the collision found
+    switch(tiletype)
     {
-        case TileBlank: 
+        case TileBlank:     // If it was ~nothing~, return TileBlank
             return TileBlank;
-        case TileSolid: 
+        case TileSolid:     // If it was a solid square, return here with TileSolid, etc.
             return TileSolid;
-        default:
-            tx = X % LevelTileSize;
-            ty = Y % LevelTileSize;
+        default:            // If it was something else, calculate the pixel within the tile now.
+            px = X % LevelTileSize;
+            py = Y % LevelTileSize;
         break;
     }
 
-    // Handle slope tiles
-    switch(tileType)
+    uint8_t hit;    // Contains the result of the collision check, 0 for nothing, 1 for something
+
+    switch(tiletype)
     {
         // Ascending slopes
-        case TileSlopeLR:       return ty > (LevelTileSize - tx);    break;                      // 1:1 slope
-        case TileSlopeLR2_1:    return (2 * ty) > (2 * LevelTileSize - tx);    break;            // 2:1 slope
-        case TileSlopeLR2_2:    return (2 * ty) > (2 * LevelTileSize - tx - LevelTileSize);   break;
+        case TileSlopeLR:       hit = (py > (LevelTileSize - px));    break;                      // 1:1 slope
+        case TileSlopeLR2_1:    hit = ((2 * py) > (2 * LevelTileSize - px));    break;            // 2:1 slope
+        case TileSlopeLR2_2:    hit = ((2 * py) > (2 * LevelTileSize - px - LevelTileSize));   break;
 
-        case TileSlopeLR3_1:    return (3 * ty) > (3 * LevelTileSize - tx);    break;            // 3:1 slope
-        case TileSlopeLR3_2:    return (3 * ty) > (3 * LevelTileSize - tx - LevelTileSize); break;
-        case TileSlopeLR3_3:    return (3 * ty) > (3 * LevelTileSize - tx - 2 * LevelTileSize); break;
+        case TileSlopeLR3_1:    hit = ((3 * py) > (3 * LevelTileSize - px));    break;            // 3:1 slope
+        case TileSlopeLR3_2:    hit = ((3 * py) > (3 * LevelTileSize - px - LevelTileSize)); break;
+        case TileSlopeLR3_3:    hit = ((3 * py) > (3 * LevelTileSize - px - 2 * LevelTileSize)); break;
 
         // Descending slopes
-        case TileSlopeRL:       return ty > tx; break;                                      // 1:1 slope
-        case TileSlopeRL2_1:    return (2 * ty) > tx; break;                                // 2:1 slope
-        case TileSlopeRL2_2:    return (2 * ty) > (tx + LevelTileSize);    break;
-        case TileSlopeRL3_1:    return (3 * ty) > tx; break;                                // 3:1 slope
-        case TileSlopeRL3_2:    return (3 * ty) > (tx + LevelTileSize);  break;
-        case TileSlopeRL3_3:    return (3 * ty) > (tx + 2 * LevelTileSize);  break;
+        case TileSlopeRL:       hit = (py > px); break;                                      // 1:1 slope
+        case TileSlopeRL2_1:    hit = ((2 * py) > px); break;                                // 2:1 slope
+        case TileSlopeRL2_2:    hit = ((2 * py) > (px + LevelTileSize));    break;
+        case TileSlopeRL3_1:    hit = ((3 * py) > px); break;                                // 3:1 slope
+        case TileSlopeRL3_2:    hit = ((3 * py) > (px + LevelTileSize));  break;
+        case TileSlopeRL3_3:    hit = ((3 * py) > (px + 2 * LevelTileSize));  break;
 
         // Half blocks
-        case TileSolidTopHalf:      return (2 * ty) < LevelTileSize;     break;
-        case TileSolidBottomHalf:   return (2 * ty) > LevelTileSize;     break;
-        case TileSolidLeftHalf:     return (tx * 2) < LevelTileSize;     break;
-        case TileSolidRightHalf:    return (tx * 2) > LevelTileSize;     break;
+        case TileSolidTopHalf:      hit = ((2 * py) < LevelTileSize);     break;
+        case TileSolidBottomHalf:   hit = ((2 * py) > LevelTileSize);     break;
+        case TileSolidLeftHalf:     hit = ((px * 2) < LevelTileSize);     break;
+        case TileSolidRightHalf:    hit = ((px * 2) > LevelTileSize);     break;
 
+        // Whatever it found, it wasn't in list, bail out here with nothing.
         default:
-            return false;
+            return TileBlank;
         break;
     }
+
+    /*
+        if HIT didn't find anything, it will be 0.
+        if HIT did find something, it will be 1.
+        Multiply by tiletype found earlier, so if it's a slope tile (e.g. 8), the result will be 0 or 8 
+    */
+
+    return hit * tiletype;
 }

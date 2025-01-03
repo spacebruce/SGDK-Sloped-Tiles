@@ -90,7 +90,7 @@ int main(bool hardReset)
         playerX += playerVX;
         playerY += playerVY;
 
-        SPR_setPosition(player, playerX - 15, playerY - 31);
+        SPR_setPosition(player, playerX - 16, playerY - 31);
 
         // Check for collision against the map
         uint8_t collider = CheckMapCollision(playerX, playerY);
