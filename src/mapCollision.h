@@ -32,30 +32,32 @@ void SetMapCollision(const uint8_t* CollisionArray, const uint16_t Width, const 
 /// @brief Check against the collision array, returns a uint8_t / u8 byte containing a CollisionType value
 /// @param X 
 /// @param Y 
+/// @return 
 uint8_t CheckMapCollision(const int16_t X, const int16_t Y);
 
 
 /// @brief Check against the collision array using a tile index as fast as possible.
 /// @param TX 
 /// @param TY 
+/// @return 
 static inline __attribute__((always_inline)) uint8_t CheckMapCollisionTileFast(const int16_t TX, const int16_t TY)
 {
-    /*
-        // Faster, but sometimes returns mysterious compiler errors, looking into it...
-        uint8_t result;
-        asm volatile
-        (
-            "move.w %[LevelCollisionWidth], %%d0      \n" // Width
-            "mulu.w %[TY], %%d0                      \n"  // TY * Width
-            "add.w %[TX], %%d0                       \n"  // + TX
-            "move.l %[LevelCollisionArray], %%a0     \n"  // LevelCollisionArray[result]
-            "move.b (%%a0, %%d0.w), %[result]        \n"
-            : [result] "=r" (result)                 
-            : [TX] "r" (TX), [TY] "r" (TY), [LevelCollisionWidth] "m" (LevelCollisionWidth),
-            [LevelCollisionArray] "m" (LevelCollisionArray) 
-            : "d0", "a0"                             
-        );
-        return result;
-    */
-    return LevelCollisionArray[TX + (TY * LevelCollisionWidth)];   
+#if defined(__GNUC__) && defined(__m68k__)
+    uint8_t result;
+    asm volatile
+    (
+        "move.w %[LevelCollisionWidth], %%d0      \n" // Width
+        "mulu.w %[TY], %%d0                      \n"  // TY * Width
+        "add.w %[TX], %%d0                       \n"  // + TX
+        "move.l %[LevelCollisionArray], %%a0     \n"  // LevelCollisionArray[result]
+        "move.b (%%a0, %%d0.w), %[result]        \n"
+        : [result] "=r" (result)                 
+        : [TX] "d" (TX), [TY] "d" (TY), [LevelCollisionWidth] "m" (LevelCollisionWidth),
+          [LevelCollisionArray] "m" (LevelCollisionArray) 
+        : "d0", "a0"                             
+    );
+    return result;
+#else
+    return LevelCollisionArray[TX + (TY * LevelCollisionWidth)];
+#endif
 }

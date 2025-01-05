@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "mapcollision.h": "c",
-        "genesis.h": "c"
+        "genesis.h": "c",
+        "cstdint": "c"
     }
 }

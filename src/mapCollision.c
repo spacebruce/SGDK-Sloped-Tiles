@@ -45,7 +45,6 @@ uint8_t CheckMapCollision(const int16_t X, const int16_t Y)
         case TileSlopeLR:       hit = (py > (LevelTileSize - px));    break;                      // 1:1 slope
         case TileSlopeLR2_1:    hit = ((2 * py) > (2 * LevelTileSize - px));    break;            // 2:1 slope
         case TileSlopeLR2_2:    hit = ((2 * py) > (2 * LevelTileSize - px - LevelTileSize));   break;
-
         case TileSlopeLR3_1:    hit = ((3 * py) > (3 * LevelTileSize - px));    break;            // 3:1 slope
         case TileSlopeLR3_2:    hit = ((3 * py) > (3 * LevelTileSize - px - LevelTileSize)); break;
         case TileSlopeLR3_3:    hit = ((3 * py) > (3 * LevelTileSize - px - 2 * LevelTileSize)); break;
