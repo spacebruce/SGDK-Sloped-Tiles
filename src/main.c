@@ -101,7 +101,7 @@ int main(bool hardReset)
             //If hit empty air, use default player palette
             SPR_setPalette(player, PAL3);
         }
-        else
+        else    // touched something
         {
             // Signal a hit by flashing to an alternate palette
             SPR_setPalette(player, PAL0);
